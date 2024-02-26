@@ -8,39 +8,73 @@
       *{
         margin: 0;
       }
-      body{
-        width: 100%;
-        height: 100%;
-      }
         .btn{
           width: 100%;
           height: 100%;
           display: flex;
           justify-content: center;
-          margin-top: 270px;
           flex-direction: row;
+          margin-top: 270px;
           flex: 1;
+
         }
-        button{
+        .buttonplay{
           width: 100px;
           height: 50px;
           margin-left: 5px;
           margin-right: 5px;
         }
+        .results{
+          display: grid;
+          grid-column: auto;
+          text-align: center;
+        }
+        .content{
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+        }
+        #resetbtn{
+          padding-top: 5px;
+          padding-bottom: 5px;
+          padding-left: 15px;
+          padding-right: 15px;
+          
+        }
     </style>
 </head>
 <body>
+    <div class="content">
     <div class="btn">
-    <button onclick="playGame('rock');">Rock</button>
-    <button onclick="playGame('paper')">Paper</button>
-    <button onclick="playGame('scissors')">Scissors</button>
-    </div>
+    <button class="buttonplay" onclick="playGame('rock');">Rock</button>
+    <button class="buttonplay" onclick="playGame('paper')">Paper</button>
+    <button class="buttonplay" onclick="playGame('scissors'); jsmove();">Scissors</button>
+  </div>
+    <div class="results">
+    <p class="js-score"></p>
+    <p class="js-picks"></p>
+    <p class="js-result"></p>
+  </div>
+  <button onclick="
+  score.wins = 0;
+  score.lose = 0;
+  score.tie = 0;
+  localStorage.removeItem('score');
+  updateScore();"
+  id="resetbtn">Reset Score</button>
+</div>
+
     <script>
         let score = JSON.parse(localStorage.getItem('score')) || {
           wins: 0,
           lose: 0,
           tie: 0
         };
+
+        updateScore();
+        jsmove();
+        jsresult();
+        
         function playGame(playerMove) {
           const computerMove = pickComputerMove();
 
@@ -80,9 +114,22 @@
         score.tie += 1;
     }
     localStorage.setItem('score', JSON.stringify(score));
-    alert(`${result} computer picks ${computerMove}\n wins: ${score.wins} lose: ${score.lose} tied: ${score.tie}`)
-  }       
 
+    updateScore();
+
+    document.querySelector('.js-picks'). innerHTML = 
+      `You picks ${playerMove} vs Computer picks ${computerMove}`
+    document.querySelector('.js-result'). innerHTML = 
+      `${result}`
+
+
+    // alert(`${result} computer picks ${computerMove}\n wins: ${score.wins} lose: ${score.lose} tied: ${score.tie}`)
+  }       
+    function updateScore(){
+      document.querySelector('.js-score').innerHTML =
+      `wins: ${score.wins} lose: ${score.lose} tied: ${score.tie}`
+    }
+     
   function pickComputerMove(){
     const randomNumber = Math.random();
 
